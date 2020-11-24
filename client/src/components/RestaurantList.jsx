@@ -3,9 +3,11 @@ import { url } from '../apis/restaurantFinder';
 import { RestaurantsContext } from '../context/RestaurantsContext';
 
 const RestaurantList = () => {
-  const { restaurants, setRestaurants } = useContext(
-    RestaurantsContext
-  );
+  const {
+    restaurants,
+    setRestaurants,
+    deleteRestaurant,
+  } = useContext(RestaurantsContext);
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -35,11 +37,27 @@ const RestaurantList = () => {
               <button className="btn btn-warning">Update</button>
             </td>
             <td>
-              <button className="btn btn-danger">Delete</button>
+              <button
+                onClick={() => handleDelete(id)}
+                className="btn btn-danger"
+              >
+                Delete
+              </button>
             </td>
           </tr>
         );
       });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      fetch(url + id, {
+        method: 'DELETE',
+      });
+      deleteRestaurant(id);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -55,6 +73,8 @@ const RestaurantList = () => {
             <th scope="col">Delete</th>
           </tr>
         </thead>
+        {/* TODO: Replace with Restaurant component */}
+        {/* TODO: Add favorite/star feature */}
         <tbody>{renderRestaurants(restaurants)}</tbody>
       </table>
     </div>
