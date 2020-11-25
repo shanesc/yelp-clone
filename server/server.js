@@ -9,9 +9,11 @@ app.use(cors());
 app.use(express.json());
 
 // Get all restaurants
-app.get('/ap/v1/restaurants', async (req, res) => {
+app.get('/api/v1/restaurants', async (req, res) => {
   try {
-    const results = await db.query('SELECT * FROM restaurants');
+    const results = await db.query(
+      'SELECT * FROM restaurants ORDER BY name'
+    );
     res.status(200).json({
       status: 'success',
       results: results.rows.length,
@@ -19,6 +21,7 @@ app.get('/ap/v1/restaurants', async (req, res) => {
         restaurants: results.rows,
       },
     });
+    //TODO: Add sort functionality using param from front-end
   } catch (err) {
     console.log(err);
     res.status(500);
@@ -26,17 +29,24 @@ app.get('/ap/v1/restaurants', async (req, res) => {
 });
 
 // Get a restaurant
-app.get('/ap/v1/restaurants/:id', async (req, res) => {
+app.get('/api/v1/restaurants/:id', async (req, res) => {
   try {
-    const results = await db.query(
+    const restaurant = await db.query(
       'SELECT * FROM restaurants WHERE id = $1',
+      [req.params.id]
+    );
+    const reviews = await db.query(
+      'SELECT * FROM reviews WHERE restaurant_id = $1',
       [req.params.id]
     );
 
     res.status(200).json({
       status: 'success',
       data: {
-        restaurant: results.rows[0],
+        restaurant: {
+          ...restaurant.rows[0],
+          reviews: reviews.rows,
+        },
       },
     });
   } catch (err) {
@@ -46,7 +56,7 @@ app.get('/ap/v1/restaurants/:id', async (req, res) => {
 });
 
 // Create a restaurant
-app.post('/ap/v1/restaurants', async (req, res) => {
+app.post('/api/v1/restaurants', async (req, res) => {
   try {
     const results = await db.query(
       'INSERT INTO restaurants (name, location, price_range) VALUES ($1, $2, $3) RETURNING *',
@@ -65,7 +75,7 @@ app.post('/ap/v1/restaurants', async (req, res) => {
 });
 
 // Update a restaurant
-app.put('/ap/v1/restaurants/:id', async (req, res) => {
+app.put('/api/v1/restaurants/:id', async (req, res) => {
   try {
     const results = await db.query(
       'UPDATE restaurants SET name = $1, location = $2, price_range = $3 WHERE id = $4 RETURNING *',
@@ -89,7 +99,7 @@ app.put('/ap/v1/restaurants/:id', async (req, res) => {
 });
 
 // Delete a restaurant
-app.delete('/ap/v1/restaurants/:id', async (req, res) => {
+app.delete('/api/v1/restaurants/:id', async (req, res) => {
   try {
     const results = await db.query(
       'DELETE FROM restaurants WHERE id = $1',

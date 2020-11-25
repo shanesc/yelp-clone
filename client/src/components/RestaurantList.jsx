@@ -31,14 +31,14 @@ const RestaurantList = () => {
       return restaurantsArray.map((restaurant) => {
         const { id, name, location, price_range } = restaurant;
         return (
-          <tr key={id}>
+          <tr onClick={() => handleSelect(id)} key={id}>
             <td>{name}</td>
             <td>{location}</td>
             <td>{'$'.repeat(price_range)}</td>
             <td>Rating</td>
             <td>
               <button
-                onClick={() => handleUpdate(id)}
+                onClick={(e) => handleUpdate(e, id)}
                 className="btn btn-warning"
               >
                 Update
@@ -46,7 +46,7 @@ const RestaurantList = () => {
             </td>
             <td>
               <button
-                onClick={() => handleDelete(id)}
+                onClick={(e) => handleDelete(e, id)}
                 className="btn btn-danger"
               >
                 Delete
@@ -57,7 +57,12 @@ const RestaurantList = () => {
       });
   };
 
-  const handleDelete = async (id) => {
+  const handleSelect = (id) => {
+    history.push(`/restaurants/${id}`);
+  };
+
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
     try {
       fetch(url + id, {
         method: 'DELETE',
@@ -68,7 +73,8 @@ const RestaurantList = () => {
     }
   };
 
-  const handleUpdate = (id) => {
+  const handleUpdate = (e, id) => {
+    e.stopPropagation();
     history.push(`/restaurants/${id}/update`);
   };
 

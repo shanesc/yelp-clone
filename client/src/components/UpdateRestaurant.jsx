@@ -9,19 +9,20 @@ const UpdateRestaurant = () => {
   const [location, setLocation] = useState('');
   const [priceRange, setPriceRange] = useState('');
 
-  useEffect(() => {
-    const fetchRestaurant = async () => {
-      try {
-        const data = await (await fetch(url + id)).json();
-        const { name, location, price_range } = data.data.restaurant;
-        setName(name);
-        setLocation(location);
-        setPriceRange(price_range);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  const fetchRestaurant = async () => {
+    try {
+      const res = await fetch(url + id);
+      const { data } = await res.json();
+      const { name, location, price_range } = data.restaurant;
+      setName(name);
+      setLocation(location);
+      setPriceRange(price_range);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
+  useEffect(() => {
     fetchRestaurant();
   }, []);
 
@@ -33,15 +34,15 @@ const UpdateRestaurant = () => {
       price_range: priceRange,
     };
     try {
-      const res = await fetch(url + id, {
+      await fetch(url + id, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      history.push('/');
+
+      await history.push('/');
     } catch (err) {
       console.log(err);
     }
@@ -76,7 +77,7 @@ const UpdateRestaurant = () => {
             value={priceRange}
             onChange={(e) => setPriceRange(e.target.value)}
             id="price_range"
-            className="form-control"
+            className="form-control custom-select"
           >
             <option disabled>Price Range</option>
             <option value="1">$</option>
