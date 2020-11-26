@@ -17,7 +17,6 @@ app.get('/api/v1/restaurants', async (req, res) => {
       'SELECT restaurants.id, restaurants.name, restaurants.location, restaurants.price_range, reviews.count, reviews.avg_rating FROM restaurants LEFT JOIN (SELECT restaurant_id, COUNT(*), TRUNC(AVG(rating), 1) AS avg_rating FROM reviews GROUP BY restaurant_id) reviews ON restaurants.id = reviews.restaurant_id ORDER BY name'
     );
 
-    console.log(results.rows);
     res.status(200).json({
       status: 'success',
       results: results.rows.length,
