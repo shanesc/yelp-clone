@@ -12,18 +12,19 @@ const DetailPage = () => {
   );
   const [restaurantIsLoaded, setRestaurantIsLoaded] = useState(false);
 
+  const fetchRestaurant = async (id) => {
+    try {
+      const res = await fetch(url + id);
+      const { data } = await res.json();
+      setSelectedRestaurant(data.restaurant);
+      setRestaurantIsLoaded(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
-    const fetchRestaurant = async () => {
-      try {
-        const res = await fetch(url + id);
-        const { data } = await res.json();
-        setSelectedRestaurant(data.restaurant);
-        setRestaurantIsLoaded(true);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchRestaurant();
+    fetchRestaurant(id);
   }, []);
 
   return (
@@ -36,7 +37,7 @@ const DetailPage = () => {
       ) : (
         ''
       )}
-      <AddReview />
+      <AddReview fetchRestaurant={fetchRestaurant} />
     </div>
   );
 };

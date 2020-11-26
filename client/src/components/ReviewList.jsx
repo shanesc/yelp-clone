@@ -3,7 +3,7 @@ import ReviewItem from './ReviewItem';
 
 const ReviewList = ({ reviews }) => {
   return (
-    <div className="form-row row-cols-3 justify-content-center mb-2 mx-0">
+    <div className="form-row row-cols-3 justify-content-between mb-2 mx-0">
       {reviews.map((review) => {
         return <ReviewItem key={review.id} review={review} />;
       })}

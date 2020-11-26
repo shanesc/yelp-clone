@@ -1,12 +1,37 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { url } from '../apis/restaurantFinder';
 
-const AddReview = () => {
+const AddReview = ({ fetchRestaurant }) => {
+  const { id } = useParams();
   const [name, setName] = useState('');
   const [rating, setRating] = useState('');
   const [content, setContent] = useState('');
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = {
+      name,
+      rating,
+      content,
+    };
+
+    try {
+      await fetch(url + id + '/addReview', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      fetchRestaurant(id);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="form-row">
         <div className="form-group col-8">
           <label htmlFor="name">Name</label>
@@ -47,9 +72,9 @@ const AddReview = () => {
           rows="5"
         ></textarea>
       </div>
-      {/* <button type="submit" className="btn btn-primary">
+      <button type="submit" className="btn btn-primary">
         Add Review
-      </button> */}
+      </button>
     </form>
   );
 };
