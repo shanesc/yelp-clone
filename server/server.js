@@ -1,7 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const bcrypt = require('bcryptjs');
 const db = require('./db');
+const { json } = require('express');
 const app = express();
 
 // Load Middleware
@@ -138,6 +140,34 @@ app.post('/api/v1/restaurants/:id/addReview', async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500);
+  }
+});
+
+// Create a user
+app.post('/api/v1/users', async (req, res) => {
+  try {
+    const hash = bcrypt.hashSync(req.body.password, 10);
+    await db.query('BEGIN TRANSACTION');
+    const results = await db.query(
+      'INSERT INTO users (name, email, joined) VALUES ($1, $2, (SELECT NOW())) RETURNING email;',
+      [req.body.name, req.body.email]
+    );
+    await db.query(
+      'INSERT INTO logins (email, hash) VALUES ($1, $2)',
+      [results.rows[0].email, hash]
+    );
+    await db.query('COMMIT TRANSACTION');
+    res.status(200).json({
+      status: 'success',
+      msg: 'User created',
+      user: {
+        name: req.body.name,
+        email: req.body.email,
+      },
+    });
+  } catch (err) {
+    await db.query('ROLLBACK TRANSACTION');
+    res.status(400).send('user login failed');
   }
 });
 
