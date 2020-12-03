@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.js": "/yelp-clone/client/static/js/main.a99db732.chunk.js",
+    "main.js.map": "/yelp-clone/client/static/js/main.a99db732.chunk.js.map",
+    "runtime-main.js": "/yelp-clone/client/static/js/runtime-main.9c6e6851.js",
+    "runtime-main.js.map": "/yelp-clone/client/static/js/runtime-main.9c6e6851.js.map",
+    "static/js/2.a0807c17.chunk.js": "/yelp-clone/client/static/js/2.a0807c17.chunk.js",
+    "static/js/2.a0807c17.chunk.js.map": "/yelp-clone/client/static/js/2.a0807c17.chunk.js.map",
+    "index.html": "/yelp-clone/client/index.html",
+    "static/js/2.a0807c17.chunk.js.LICENSE.txt": "/yelp-clone/client/static/js/2.a0807c17.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9c6e6851.js",
+    "static/js/2.a0807c17.chunk.js",
+    "static/js/main.a99db732.chunk.js"
+  ]
+}
