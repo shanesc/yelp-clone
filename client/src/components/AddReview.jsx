@@ -17,7 +17,7 @@ const AddReview = ({ fetchRestaurant }) => {
     };
 
     try {
-      await fetch(url + id + '/addReview', {
+      await fetch(url.restaurants + id + '/addReview', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,12 +52,12 @@ const AddReview = ({ fetchRestaurant }) => {
             id="rating"
             className="custom-select"
           >
-            <option disabled>Price Range</option>
-            <option value="1">$</option>
-            <option value="2">$$</option>
-            <option value="3">$$$</option>
-            <option value="4">$$$$</option>
-            <option value="5">$$$$$</option>
+            <option disabled>Rating</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
           </select>
         </div>
       </div>

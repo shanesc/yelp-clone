@@ -47,7 +47,7 @@ router.post('', async (req, res) => {
     const hash = bcrypt.hashSync(req.body.password, 10);
     await db.query('BEGIN TRANSACTION');
     const results = await db.query(
-      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING email;',
+      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *;',
       [req.body.name, req.body.email]
     );
     await db.query(
@@ -58,15 +58,45 @@ router.post('', async (req, res) => {
     res.status(200).json({
       status: 'success',
       msg: 'User created',
-      user: {
-        name: req.body.name,
-        email: req.body.email,
-      },
+      user: results.rows[0],
     });
   } catch (err) {
     await db.query('ROLLBACK TRANSACTION');
     console.log(err);
     res.status(400).send('Create user failed');
+  }
+});
+
+// Sign in a user
+router.post('/signin', async (req, res) => {
+  try {
+    const results = await db.query(
+      'SELECT * FROM logins WHERE email = $1',
+      [req.body.email]
+    );
+    const login = await results.rows[0];
+    const isValid = bcrypt.compareSync(req.body.password, login.hash);
+    if (isValid) {
+      const userResults = await db.query(
+        'SELECT * FROM users WHERE email = $1',
+        [req.body.email]
+      );
+      const user = await userResults.rows[0];
+      res.status(200).json({
+        status: 'success',
+        msg: 'Login successful',
+        user,
+      });
+    } else {
+      res.status(400).json({
+        msg: 'Login failed',
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      msg: 'Login failed',
+    });
   }
 });
 

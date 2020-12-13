@@ -31,7 +31,7 @@ const RestaurantItem = ({ restaurant }) => {
   const handleDelete = async (e, id) => {
     e.stopPropagation();
     try {
-      fetch(url + id, {
+      fetch(url.restaurants + id, {
         method: 'DELETE',
       });
       deleteRestaurant(id);
@@ -43,12 +43,15 @@ const RestaurantItem = ({ restaurant }) => {
   const { id, name, location, price_range } = restaurant;
   return (
     <>
-      <tr onClick={() => handleSelect(id)} key={id}>
-        <td>{name}</td>
-        <td>{location}</td>
-        <td>{'$'.repeat(price_range)}</td>
-        <td>{renderRating(restaurant)}</td>
-        <td>
+      <tr
+        style={{ cursor: 'pointer' }}
+        onClick={() => handleSelect(id)}
+      >
+        <td className="align-middle">{name}</td>
+        <td className="align-middle">{location}</td>
+        <td className="align-middle">{'$'.repeat(price_range)}</td>
+        <td className="align-middle">{renderRating(restaurant)}</td>
+        <td className="align-middle">
           <button
             onClick={(e) => handleUpdate(e, id)}
             className="btn btn-warning"
@@ -56,7 +59,7 @@ const RestaurantItem = ({ restaurant }) => {
             Update
           </button>
         </td>
-        <td>
+        <td className="align-middle">
           <button
             onClick={(e) => handleDelete(e, id)}
             className="btn btn-danger"

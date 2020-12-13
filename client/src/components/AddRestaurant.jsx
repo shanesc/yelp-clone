@@ -16,7 +16,7 @@ const AddRestaurant = () => {
       price_range: priceRange,
     };
     try {
-      const res = await fetch(url, {
+      const res = await fetch(url.restaurants, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -8,6 +8,7 @@ import Home from './routes/Home';
 import DetailPage from './routes/DetailPage';
 import UpdatePage from './routes/UpdatePage';
 import { RestaurantsContextProvider } from './context/RestaurantsContext';
+import UserRegister from './routes/UserRegister';
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
             </Route>
             <Route exact path="/restaurants/:id/update">
               <UpdatePage />
+            </Route>
+            <Route exact path="/users/register">
+              <UserRegister />
             </Route>
           </Switch>
         </Router>

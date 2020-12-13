@@ -11,7 +11,7 @@ const UpdateRestaurant = () => {
 
   const fetchRestaurant = async () => {
     try {
-      const res = await fetch(url + id);
+      const res = await fetch(url.restaurants + id);
       const { data } = await res.json();
       const { name, location, price_range } = data.restaurant;
       setName(name);
@@ -34,7 +34,7 @@ const UpdateRestaurant = () => {
       price_range: priceRange,
     };
     try {
-      await fetch(url + id, {
+      await fetch(url.restaurants + id, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

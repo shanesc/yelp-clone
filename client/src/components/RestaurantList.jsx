@@ -10,7 +10,7 @@ const RestaurantList = () => {
 
   const fetchRestaurants = async () => {
     try {
-      const res = await fetch(url);
+      const res = await fetch(url.restaurants);
       const data = await res.json();
       setRestaurants(data.data.restaurants);
     } catch (err) {
@@ -23,30 +23,34 @@ const RestaurantList = () => {
   }, []);
 
   const renderRestaurants = (restaurantsArray) => {
-    if (restaurantsArray) {
-      return restaurantsArray.map((restaurant) => (
-        <RestaurantItem restaurant={restaurant} />
-      ));
-    }
+    return restaurantsArray.map((restaurant) => (
+      <RestaurantItem key={restaurant.id} restaurant={restaurant} />
+    ));
   };
 
   return (
-    <div className="list-group">
-      <table className="table table-hover table-dark">
-        <thead>
-          <tr className="bg-primary">
-            <th scope="col">Restaurant</th>
-            <th scope="col">Location</th>
-            <th scope="col">Price Range</th>
-            <th scope="col">Ratings</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
-          </tr>
-        </thead>
-        {/* TODO: Add favorite/star feature */}
-        <tbody>{renderRestaurants(restaurants)}</tbody>
-      </table>
-    </div>
+    <>
+      {restaurants ? (
+        <div className="list-group">
+          <table className="table table-hover table-dark">
+            <thead>
+              <tr className="bg-primary">
+                <th scope="col">Restaurant</th>
+                <th scope="col">Location</th>
+                <th scope="col">Price Range</th>
+                <th scope="col">Ratings</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+              </tr>
+            </thead>
+            {/* TODO: Add favorite/star feature */}
+            <tbody>{renderRestaurants(restaurants)}</tbody>
+          </table>
+        </div>
+      ) : (
+        <h3 className="text-center">Loading...</h3>
+      )}
+    </>
   );
 };
 
