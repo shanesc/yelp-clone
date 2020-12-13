@@ -15,7 +15,7 @@ const DetailPage = () => {
 
   const fetchRestaurant = async (id) => {
     try {
-      const res = await fetch(url + id);
+      const res = await fetch(url.restaurants + id);
       const { data } = await res.json();
       setSelectedRestaurant(data.restaurant);
       setRestaurantIsLoaded(true);
